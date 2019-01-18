@@ -1,0 +1,810 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1400,
+  "model": {
+    "culture": "en-GB",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "infoctrl-comset.westeurope.cloudapp.azure.com",
+            "database": "ACIAPepandCo5_UAT"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "UsernamePassword",
+          "kind": "SQL",
+          "path": "infoctrl-comset.westeurope.cloudapp.azure.com;ACIAPepandCo5_UAT",
+          "Username": "Comset_01",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "Facts",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "intComsetMAFINDATAId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAFINDATAId"
+          },
+          {
+            "name": "intComsetMATIMEId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMATIMEId"
+          },
+          {
+            "name": "intComsetMACATEGORYId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMACATEGORYId"
+          },
+          {
+            "name": "intComsetMASTOREId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMASTOREId"
+          },
+          {
+            "name": "intComsetMAPRODUCTId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAPRODUCTId"
+          },
+          {
+            "name": "intComsetMAACCOUNTId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAACCOUNTId"
+          },
+          {
+            "name": "Value",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Value"
+          },
+          {
+            "name": "intComsetMACURRENCYId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMACURRENCYId"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMAFINDATA = Source{[Schema=\"dbo\",Item=\"tblComsetMAFINDATA\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMAFINDATA,{\"intComsetMA_FINDATA_Deleted_TF\", \"dteComsetMA_FINDATA_Date_Created\", \"strComsetMA_FINDATA_User_Last_Modified\", \"strComsetMA_FINDATA_User_Created\", \"dteComsetMA_FINDATA_Date_Modified\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns\",{{\"decComsetMAFINDATAValue\", \"Value\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Amount",
+            "expression": "SUM([Value])"
+          }
+        ]
+      },
+      {
+        "name": "Account",
+        "columns": [
+          {
+            "name": "intComsetMAACCOUNTId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAACCOUNTId"
+          },
+          {
+            "name": "Account Name",
+            "dataType": "string",
+            "sourceColumn": "AccountName"
+          },
+          {
+            "name": "Account Description",
+            "dataType": "string",
+            "sourceColumn": "AccountDescription"
+          },
+          {
+            "name": "Account Hierarchy Description",
+            "dataType": "string",
+            "sourceColumn": "NameDescription"
+          },
+          {
+            "name": "intComsetMAACCOUNTAcc_IsLeaf",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAACCOUNTAcc_IsLeaf"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "strComsetMAACCOUNTAcc_Parent"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMAACCOUNT = Source{[Schema=\"dbo\",Item=\"tblComsetMAACCOUNT\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMAACCOUNT,{\"intComsetMA_ACCOUNT_Deleted_TF\", \"dteComsetMA_ACCOUNT_Date_Created\", \"strComsetMA_ACCOUNT_User_Last_Modified\", \"strComsetMA_ACCOUNT_User_Created\", \"dteComsetMA_ACCOUNT_Date_Modified\", \"intComsetMAACCOUNTCycleAddedIn\", \"strComsetMAACCOUNTAcc_Format\", \"strComsetMAACCOUNTAcc_Group\", \"strComsetMAACCOUNTAcc_RateType\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns\",{{\"strComsetMAACCOUNTAccount\", \"AccountName\"}, {\"strComsetMAACCOUNTAcc_Description\", \"AccountDescription\"}, {\"strComsetMAACCOUNTAcc_HierDescription\", \"NameDescription\"}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Renamed Columns\", each ([intComsetMAACCOUNTAcc_IsLeaf] = 1)),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Filtered Rows\",{\"intComsetMAACCOUNTAcc_Level\", \"intComsetMAACCOUNTAcc_Order\", \"strComsetMAACCOUNTAcc_Type\"})",
+                "in",
+                "    #\"Removed Columns1\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Time",
+        "columns": [
+          {
+            "name": "intComsetMATIMEId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMATIMEId"
+          },
+          {
+            "name": "Month",
+            "dataType": "string",
+            "sourceColumn": "Month",
+            "sortByColumn": "SortOrder"
+          },
+          {
+            "name": "Month Description",
+            "dataType": "string",
+            "sourceColumn": "Month Description",
+            "sortByColumn": "SortOrder"
+          },
+          {
+            "name": "Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Parent"
+          },
+          {
+            "name": "SortOrder",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intOrder"
+          },
+          {
+            "type": "calculated",
+            "name": "Qtr",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(timeQTRS[Qtr])"
+          },
+          {
+            "type": "calculated",
+            "name": "Year",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(timeQTRS[Year])"
+          },
+          {
+            "name": "strMonth",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "strMonth"
+          },
+          {
+            "type": "calculated",
+            "name": "Mth",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "expression": "CONCATENATE(CONCATENATE(left(Time[strMonth],4),\".\"),MID(Time[strMonth],5,2))"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMATIME = Source{[Schema=\"dbo\",Item=\"tblComsetMATIME\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMATIME,{\"intComsetMA_TIME_Deleted_TF\", \"dteComsetMA_TIME_Date_Created\", \"strComsetMA_TIME_User_Last_Modified\", \"strComsetMA_TIME_User_Created\", \"dteComsetMA_TIME_Date_Modified\", \"intComsetMATIMECycleAddedIn\", \"intComsetMATIMETime_Year\", \"strComsetMATIMETime_Period\", \"intComsetMATIMETime_IsLeaf\", \"intComsetMATIMETime_Level\", \"intComsetMATIMETime_Order\", \"strComsetMATIMETime_Prior\", \"strComsetMATIMETime_Next\", \"strComsetMATIMETime_Start\", \"strComsetMATIMETime_NextStart\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([strComsetMATIMETime_PeriodType] = \"MONTH\")),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"strComsetMATIMETime\", \"Month\"}, {\"strComsetMATIMETime_Description\", \"Month Description\"}}),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Renamed Columns\",{\"strComsetMATIMETime_PeriodType\"}),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Removed Columns1\",{{\"strComsetMATIMETime_Parent\", \"Parent\"}, {\"intComsetMATIMETime_Num\", \"intOrder\"}}),",
+                "    #\"Duplicated Column\" = Table.DuplicateColumn(#\"Renamed Columns1\", \"intOrder\", \"intOrder - Copy\"),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Duplicated Column\",{{\"intOrder - Copy\", type text}}),",
+                "    #\"Renamed Columns2\" = Table.RenameColumns(#\"Changed Type\",{{\"intOrder - Copy\", \"strMonth\"}}),",
+                "    #\"Reordered Columns\" = Table.ReorderColumns(#\"Renamed Columns2\",{\"intComsetMATIMEId\", \"strMonth\", \"Month\", \"Month Description\", \"Parent\", \"intOrder\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\"})",
+                "in",
+                "    #\"Reordered Columns\""
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Calendar",
+            "levels": [
+              {
+                "name": "Year",
+                "ordinal": 0,
+                "column": "Year"
+              },
+              {
+                "name": "Quarter",
+                "ordinal": 1,
+                "column": "Qtr"
+              },
+              {
+                "name": "Month",
+                "ordinal": 2,
+                "column": "Mth"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "timeQTRS",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ID"
+          },
+          {
+            "name": "Qtr",
+            "dataType": "string",
+            "sourceColumn": "MONTH"
+          },
+          {
+            "name": "Qtr Description",
+            "dataType": "string",
+            "sourceColumn": "Month Description"
+          },
+          {
+            "name": "Year",
+            "dataType": "string",
+            "sourceColumn": "Year"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMATIME = Source{[Schema=\"dbo\",Item=\"tblComsetMATIME\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMATIME,{\"intComsetMATIMEId\", \"intComsetMA_TIME_Deleted_TF\", \"dteComsetMA_TIME_Date_Created\", \"strComsetMA_TIME_User_Last_Modified\", \"strComsetMA_TIME_User_Created\", \"dteComsetMA_TIME_Date_Modified\", \"intComsetMATIMECycleAddedIn\", \"strComsetMATIMETime_Period\", \"intComsetMATIMETime_IsLeaf\", \"strComsetMATIMETime_Parent\", \"intComsetMATIMETime_Level\", \"intComsetMATIMETime_Order\", \"strComsetMATIMETime_Prior\", \"strComsetMATIMETime_Next\", \"strComsetMATIMETime_Start\", \"strComsetMATIMETime_NextStart\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([strComsetMATIMETime_PeriodType] = \"QUARTER\")),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"strComsetMATIMETime\", \"MONTH\"}, {\"strComsetMATIMETime_Description\", \"Month Description\"}, {\"intComsetMATIMETime_Year\", \"Year\"}}),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Renamed Columns\",{\"strComsetMATIMETime_PeriodType\"}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Removed Columns1\",{{\"intComsetMATIMETime_Num\", type text}}),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Changed Type\",{{\"intComsetMATIMETime_Num\", \"ID\"}}),",
+                "    #\"Reordered Columns\" = Table.ReorderColumns(#\"Renamed Columns1\",{\"ID\", \"MONTH\", \"Month Description\", \"Year\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\"}),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Reordered Columns\",{{\"Year\", type text}}),",
+                "    #\"Removed Columns2\" = Table.RemoveColumns(#\"Changed Type1\",{\"tblComsetMAFINDATA\", \"tblComsetMASTATUS\"})",
+                "in",
+                "    #\"Removed Columns2\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Category",
+        "columns": [
+          {
+            "name": "intComsetMACATEGORYId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMACATEGORYId"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "Description"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMACATEGORY = Source{[Schema=\"dbo\",Item=\"tblComsetMACATEGORY\"]}[Data],",
+                "    #\"Renamed Columns\" = Table.RenameColumns(dbo_tblComsetMACATEGORY,{{\"strComsetMACATEGORYCategory\", \"Category\"}, {\"strComsetMACATEGORYCat_Description\", \"Description\"}}),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Renamed Columns\",{\"intComsetMA_CATEGORY_Deleted_TF\", \"dteComsetMA_CATEGORY_Date_Created\", \"strComsetMA_CATEGORY_User_Last_Modified\", \"strComsetMA_CATEGORY_User_Created\", \"dteComsetMA_CATEGORY_Date_Modified\", \"intComsetMACATEGORYCycleAddedIn\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each [Category] <> null and [Category] <> \"\")",
+                "in",
+                "    #\"Filtered Rows\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Stores",
+        "columns": [
+          {
+            "name": "intComsetMASTOREId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMASTOREId"
+          },
+          {
+            "name": "Store",
+            "dataType": "string",
+            "sourceColumn": "Store"
+          },
+          {
+            "name": "Town",
+            "dataType": "string",
+            "sourceColumn": "Store Description"
+          },
+          {
+            "name": "H1_Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "H1_Parent"
+          },
+          {
+            "name": "H2_Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "H2_Parent"
+          },
+          {
+            "type": "calculated",
+            "name": "Region",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(Regions[Region Description])"
+          },
+          {
+            "type": "calculated",
+            "name": "Company",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(Company[Company Name])"
+          },
+          {
+            "type": "calculated",
+            "name": "StoreH2Hier",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "expression": "Stores[Store]"
+          },
+          {
+            "type": "calculated",
+            "name": "Size Type",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(StoreType[Store Type Description])"
+          },
+          {
+            "type": "calculated",
+            "name": "Store Type",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(StoreSize[Size Description])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMASTORE = Source{[Schema=\"dbo\",Item=\"tblComsetMASTORE\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMASTORE,{\"intComsetMA_STORE_Deleted_TF\", \"dteComsetMA_STORE_Date_Created\", \"strComsetMA_STORE_User_Last_Modified\", \"strComsetMA_STORE_User_Created\", \"dteComsetMA_STORE_Date_Modified\", \"intComsetMASTORECycleAddedIn\", \"intComsetMACURRENCYId\", \"intComsetMAUSERId\", \"intComsetMASTOREStore_H1Level\", \"intComsetMASTOREStore_H1Order\", \"intComsetMASTOREStore_H2Level\", \"intComsetMASTOREStore_H2Order\", \"tblComsetMACURRENCY\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\", \"tblComsetMAUSER\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMASTOREStore_IsLeaf] = 1)),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"strComsetMASTOREStore\", \"Store\"}, {\"strComsetMASTOREStore_Description\", \"Store Description\"}}),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Renamed Columns\",{\"intComsetMASTOREStore_IsLeaf\"}),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Removed Columns1\",{{\"strComsetMASTOREStore_H1Parent\", \"H1_Parent\"}, {\"strComsetMASTOREStore_H2Parent\", \"H2_Parent\"}})",
+                "in",
+                "    #\"Renamed Columns1\""
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Company Hierarchy",
+            "levels": [
+              {
+                "name": "Company",
+                "ordinal": 0,
+                "column": "Company"
+              },
+              {
+                "name": "Region",
+                "ordinal": 1,
+                "column": "Region"
+              },
+              {
+                "name": "Store Name",
+                "ordinal": 2,
+                "column": "Store"
+              }
+            ]
+          },
+          {
+            "name": "Store Types Hierarchy",
+            "levels": [
+              {
+                "name": "Type",
+                "ordinal": 0,
+                "column": "Store Type"
+              },
+              {
+                "name": "Size",
+                "ordinal": 1,
+                "column": "Size Type"
+              },
+              {
+                "name": "Store Name",
+                "ordinal": 2,
+                "column": "StoreH2Hier"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Regions",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Region",
+            "dataType": "string",
+            "sourceColumn": "Region"
+          },
+          {
+            "name": "Region Description",
+            "dataType": "string",
+            "sourceColumn": "Region Description"
+          },
+          {
+            "name": "H1_Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "H1_Parent"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMASTORE = Source{[Schema=\"dbo\",Item=\"tblComsetMASTORE\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMASTORE,{\"intComsetMASTOREId\", \"intComsetMA_STORE_Deleted_TF\", \"dteComsetMA_STORE_Date_Created\", \"strComsetMA_STORE_User_Last_Modified\", \"strComsetMA_STORE_User_Created\", \"dteComsetMA_STORE_Date_Modified\", \"intComsetMASTORECycleAddedIn\", \"intComsetMACURRENCYId\", \"intComsetMAUSERId\", \"intComsetMASTOREStore_IsLeaf\", \"intComsetMASTOREStore_H1Order\", \"strComsetMASTOREStore_H2Parent\", \"intComsetMASTOREStore_H2Level\", \"intComsetMASTOREStore_H2Order\", \"tblComsetMACURRENCY\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\", \"tblComsetMAUSER\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMASTOREStore_H1Level] = 1)),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"strComsetMASTOREStore\", \"Region\"}, {\"strComsetMASTOREStore_Description\", \"Region Description\"}, {\"strComsetMASTOREStore_H1Parent\", \"H1_Parent\"}}),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Renamed Columns\",{\"intComsetMASTOREStore_H1Level\"})",
+                "in",
+                "    #\"Removed Columns1\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Company",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Company Name",
+            "dataType": "string",
+            "sourceColumn": "Company Name"
+          },
+          {
+            "name": "Company Description",
+            "dataType": "string",
+            "sourceColumn": "Company Description"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMASTORE = Source{[Schema=\"dbo\",Item=\"tblComsetMASTORE\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMASTORE,{\"intComsetMASTOREId\", \"intComsetMA_STORE_Deleted_TF\", \"dteComsetMA_STORE_Date_Created\", \"strComsetMA_STORE_User_Last_Modified\", \"strComsetMA_STORE_User_Created\", \"dteComsetMA_STORE_Date_Modified\", \"intComsetMASTORECycleAddedIn\", \"intComsetMACURRENCYId\", \"intComsetMAUSERId\", \"strComsetMASTOREStore_H2Parent\", \"intComsetMASTOREStore_H2Level\", \"intComsetMASTOREStore_H2Order\", \"tblComsetMACURRENCY\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\", \"tblComsetMAUSER\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMASTOREStore_IsLeaf] = 0)),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Filtered Rows\",{\"intComsetMASTOREStore_H1Order\", \"intComsetMASTOREStore_H1Level\", \"intComsetMASTOREStore_IsLeaf\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns1\",{{\"strComsetMASTOREStore\", \"Company\"}, {\"strComsetMASTOREStore_Description\", \"Company Description\"}}),",
+                "    #\"Removed Columns2\" = Table.RemoveColumns(#\"Renamed Columns\",{\"strComsetMASTOREStore_H1Parent\"}),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Removed Columns2\",{{\"Company\", \"Company Name\"}})",
+                "in",
+                "    #\"Renamed Columns1\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "StoreType",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Store Type",
+            "dataType": "string",
+            "sourceColumn": "Store Type"
+          },
+          {
+            "name": "Store Type Description",
+            "dataType": "string",
+            "sourceColumn": "Store Type Description"
+          },
+          {
+            "name": "H2_Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "H2_Parent"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMASTORE = Source{[Schema=\"dbo\",Item=\"tblComsetMASTORE\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMASTORE,{\"intComsetMASTOREId\", \"intComsetMA_STORE_Deleted_TF\", \"dteComsetMA_STORE_Date_Created\", \"strComsetMA_STORE_User_Last_Modified\", \"strComsetMA_STORE_User_Created\", \"dteComsetMA_STORE_Date_Modified\", \"intComsetMASTORECycleAddedIn\", \"intComsetMACURRENCYId\", \"intComsetMAUSERId\", \"strComsetMASTOREStore_H1Parent\", \"intComsetMASTOREStore_H1Level\", \"intComsetMASTOREStore_H1Order\", \"intComsetMASTOREStore_H2Order\", \"tblComsetMACURRENCY\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMASTOREStore_IsLeaf] = 0)),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Filtered Rows\", each [strComsetMASTOREStore_H2Parent] <> null and [strComsetMASTOREStore_H2Parent] <> \"\"),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Filtered Rows1\",{\"intComsetMASTOREStore_IsLeaf\", \"intComsetMASTOREStore_H2Level\", \"tblComsetMAUSER\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns1\",{{\"strComsetMASTOREStore\", \"Store Type\"}, {\"strComsetMASTOREStore_Description\", \"Store Type Description\"}, {\"strComsetMASTOREStore_H2Parent\", \"H2_Parent\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "StoreSize",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "Size Name",
+            "dataType": "string",
+            "sourceColumn": "strComsetMASTOREStore"
+          },
+          {
+            "name": "Size Description",
+            "dataType": "string",
+            "sourceColumn": "strComsetMASTOREStore_Description"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMASTORE = Source{[Schema=\"dbo\",Item=\"tblComsetMASTORE\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMASTORE,{\"intComsetMASTOREId\", \"intComsetMA_STORE_Deleted_TF\", \"dteComsetMA_STORE_Date_Created\", \"strComsetMA_STORE_User_Last_Modified\", \"strComsetMA_STORE_User_Created\", \"dteComsetMA_STORE_Date_Modified\", \"intComsetMASTORECycleAddedIn\", \"intComsetMACURRENCYId\", \"intComsetMAUSERId\", \"strComsetMASTOREStore_H1Parent\", \"intComsetMASTOREStore_H1Level\", \"intComsetMASTOREStore_H1Order\", \"intComsetMASTOREStore_H2Order\", \"tblComsetMACURRENCY\", \"tblComsetMAFINDATA\", \"tblComsetMASTATUS\", \"tblComsetMAUSER\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMASTOREStore_IsLeaf] = 0) and ([intComsetMASTOREStore_H2Level] = 0)),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Filtered Rows\",{\"intComsetMASTOREStore_IsLeaf\", \"strComsetMASTOREStore_H2Parent\", \"intComsetMASTOREStore_H2Level\"})",
+                "in",
+                "    #\"Removed Columns1\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product",
+        "columns": [
+          {
+            "name": "intComsetMAPRODUCTId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "intComsetMAPRODUCTId"
+          },
+          {
+            "name": "Product",
+            "dataType": "string",
+            "sourceColumn": "Product"
+          },
+          {
+            "name": "Product Description",
+            "dataType": "string",
+            "sourceColumn": "Product Description"
+          },
+          {
+            "name": "Product Hierarchy Description",
+            "dataType": "string",
+            "sourceColumn": "Product Hierarchy Description"
+          },
+          {
+            "name": "Parent",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Parent"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMAPRODUCT = Source{[Schema=\"dbo\",Item=\"tblComsetMAPRODUCT\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMAPRODUCT,{\"intComsetMA_PRODUCT_Deleted_TF\", \"dteComsetMA_PRODUCT_Date_Created\", \"strComsetMA_PRODUCT_User_Last_Modified\", \"strComsetMA_PRODUCT_User_Created\", \"dteComsetMA_PRODUCT_Date_Modified\", \"intComsetMAPRODUCTCycleAddedIn\", \"intComsetMAPRODUCTProd_Level\", \"intComsetMAPRODUCTProd_Order\", \"tblComsetMAFINDATA\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Columns\", each ([intComsetMAPRODUCTProd_IsLeaf] = 1)),",
+                "    #\"Removed Columns1\" = Table.RemoveColumns(#\"Filtered Rows\",{\"intComsetMAPRODUCTProd_IsLeaf\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns1\",{{\"strComsetMAPRODUCTProduct\", \"Product\"}, {\"strComsetMAPRODUCTProd_Description\", \"Product Description\"}, {\"strComsetMAPRODUCTProd_HierText\", \"Product Hierarchy Description\"}, {\"strComsetMAPRODUCTProd_Parent\", \"Parent\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "e12476ac-031d-40e9-8dba-911c55852b32",
+        "fromTable": "Facts",
+        "fromColumn": "intComsetMAACCOUNTId",
+        "toTable": "Account",
+        "toColumn": "intComsetMAACCOUNTId"
+      },
+      {
+        "name": "99c4309a-f404-4893-b1f1-9e95f762ccfe",
+        "fromTable": "Facts",
+        "fromColumn": "intComsetMATIMEId",
+        "toTable": "Time",
+        "toColumn": "intComsetMATIMEId"
+      },
+      {
+        "name": "fa189f5a-f263-46e2-bf57-a6182e8914ad",
+        "fromTable": "Time",
+        "fromColumn": "Parent",
+        "toTable": "timeQTRS",
+        "toColumn": "ID"
+      },
+      {
+        "name": "d1cd041f-065d-4ec6-b905-988cc7a3120a",
+        "fromTable": "Facts",
+        "fromColumn": "intComsetMACATEGORYId",
+        "toTable": "Category",
+        "toColumn": "intComsetMACATEGORYId"
+      },
+      {
+        "name": "344eb2e9-5939-4b72-bda9-58d77c689b71",
+        "fromTable": "Facts",
+        "fromColumn": "intComsetMASTOREId",
+        "toTable": "Stores",
+        "toColumn": "intComsetMASTOREId"
+      },
+      {
+        "name": "52e1d852-727b-4169-9e3c-ab07b6557d9d",
+        "fromTable": "Stores",
+        "fromColumn": "H1_Parent",
+        "toTable": "Regions",
+        "toColumn": "Region"
+      },
+      {
+        "name": "660e2dd6-edcc-4fd3-9cc9-534598aee4ba",
+        "fromTable": "Regions",
+        "fromColumn": "H1_Parent",
+        "toTable": "Company",
+        "toColumn": "Company Name"
+      },
+      {
+        "name": "229f6c9d-bce8-4974-b1da-219faa30f388",
+        "fromTable": "Stores",
+        "fromColumn": "H2_Parent",
+        "toTable": "StoreType",
+        "toColumn": "Store Type"
+      },
+      {
+        "name": "b405f603-5f7e-4b90-bdf7-53c75c650328",
+        "fromTable": "StoreType",
+        "fromColumn": "H2_Parent",
+        "toTable": "StoreSize",
+        "toColumn": "Size Name"
+      },
+      {
+        "name": "96042b1f-bb69-4e4b-bce5-a980e256401e",
+        "fromTable": "Facts",
+        "fromColumn": "intComsetMAPRODUCTId",
+        "toTable": "Product",
+        "toColumn": "intComsetMAPRODUCTId"
+      }
+    ],
+    "roles": [
+      {
+        "name": "Viewers",
+        "modelPermission": "read",
+        "members": [
+          {
+            "memberName": "howard.stiles@comset.co.uk",
+            "memberId": "howard.stiles@comset.co.uk",
+            "identityProvider": "AzureAD"
+          }
+        ],
+        "tablePermissions": [
+          {
+            "name": "Product",
+            "metadataPermission": "none"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "500"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}

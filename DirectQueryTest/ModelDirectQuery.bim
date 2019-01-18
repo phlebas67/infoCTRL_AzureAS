@@ -1,0 +1,295 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1400,
+  "model": {
+    "defaultMode": "directQuery",
+    "culture": "en-GB",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "infoctrl-comset.westeurope.cloudapp.azure.com",
+            "database": "ACIAPepandCo5_UAT"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "UsernamePassword",
+          "Username": "Comset_01",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "tblComsetMACATEGORY",
+        "columns": [
+          {
+            "name": "intComsetMACATEGORYId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMACATEGORYId"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Category Description",
+            "dataType": "string",
+            "sourceColumn": "Category Description"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMACATEGORY = Source{[Schema=\"dbo\",Item=\"tblComsetMACATEGORY\"]}[Data],",
+                "    #\"Removed Columns\" = Table.RemoveColumns(dbo_tblComsetMACATEGORY,{\"intComsetMA_CATEGORY_Deleted_TF\", \"dteComsetMA_CATEGORY_Date_Created\", \"strComsetMA_CATEGORY_User_Last_Modified\", \"strComsetMA_CATEGORY_User_Created\", \"dteComsetMA_CATEGORY_Date_Modified\", \"intComsetMACATEGORYCycleAddedIn\", \"tblComsetMASTATUS\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns\",{{\"strComsetMACATEGORYCategory\", \"Category\"}, {\"strComsetMACATEGORYCat_Description\", \"Category Description\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "tblComsetMAFINDATA",
+        "columns": [
+          {
+            "name": "intComsetMAFINDATAId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAFINDATAId"
+          },
+          {
+            "name": "intComsetMA_FINDATA_Deleted_TF",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMA_FINDATA_Deleted_TF"
+          },
+          {
+            "name": "dteComsetMA_FINDATA_Date_Created",
+            "dataType": "string",
+            "sourceColumn": "dteComsetMA_FINDATA_Date_Created"
+          },
+          {
+            "name": "strComsetMA_FINDATA_User_Last_Modified",
+            "dataType": "string",
+            "sourceColumn": "strComsetMA_FINDATA_User_Last_Modified"
+          },
+          {
+            "name": "strComsetMA_FINDATA_User_Created",
+            "dataType": "string",
+            "sourceColumn": "strComsetMA_FINDATA_User_Created"
+          },
+          {
+            "name": "dteComsetMA_FINDATA_Date_Modified",
+            "dataType": "string",
+            "sourceColumn": "dteComsetMA_FINDATA_Date_Modified"
+          },
+          {
+            "name": "intComsetMATIMEId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMATIMEId"
+          },
+          {
+            "name": "intComsetMACATEGORYId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMACATEGORYId"
+          },
+          {
+            "name": "intComsetMASTOREId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMASTOREId"
+          },
+          {
+            "name": "intComsetMAPRODUCTId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAPRODUCTId"
+          },
+          {
+            "name": "intComsetMAACCOUNTId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTId"
+          },
+          {
+            "name": "decComsetMAFINDATAValue",
+            "dataType": "double",
+            "sourceColumn": "decComsetMAFINDATAValue"
+          },
+          {
+            "name": "intComsetMACURRENCYId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMACURRENCYId"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMAFINDATA = Source{[Schema=\"dbo\",Item=\"tblComsetMAFINDATA\"]}[Data]",
+                "in",
+                "    dbo_tblComsetMAFINDATA"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Amount",
+            "expression": "SUM([decComsetMAFINDATAValue])"
+          }
+        ]
+      },
+      {
+        "name": "tblComsetMAACCOUNT",
+        "columns": [
+          {
+            "name": "intComsetMAACCOUNTId",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTId"
+          },
+          {
+            "name": "intComsetMA_ACCOUNT_Deleted_TF",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMA_ACCOUNT_Deleted_TF"
+          },
+          {
+            "name": "dteComsetMA_ACCOUNT_Date_Created",
+            "dataType": "string",
+            "sourceColumn": "dteComsetMA_ACCOUNT_Date_Created"
+          },
+          {
+            "name": "strComsetMA_ACCOUNT_User_Last_Modified",
+            "dataType": "string",
+            "sourceColumn": "strComsetMA_ACCOUNT_User_Last_Modified"
+          },
+          {
+            "name": "strComsetMA_ACCOUNT_User_Created",
+            "dataType": "string",
+            "sourceColumn": "strComsetMA_ACCOUNT_User_Created"
+          },
+          {
+            "name": "dteComsetMA_ACCOUNT_Date_Modified",
+            "dataType": "string",
+            "sourceColumn": "dteComsetMA_ACCOUNT_Date_Modified"
+          },
+          {
+            "name": "intComsetMAACCOUNTCycleAddedIn",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTCycleAddedIn"
+          },
+          {
+            "name": "strComsetMAACCOUNTAccount",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAccount"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Description",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_Description"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_HierDescription",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_HierDescription"
+          },
+          {
+            "name": "intComsetMAACCOUNTAcc_IsLeaf",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTAcc_IsLeaf"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Parent",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_Parent"
+          },
+          {
+            "name": "intComsetMAACCOUNTAcc_Level",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTAcc_Level"
+          },
+          {
+            "name": "intComsetMAACCOUNTAcc_Order",
+            "dataType": "int64",
+            "sourceColumn": "intComsetMAACCOUNTAcc_Order"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Type",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_Type"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Format",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_Format"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_Group",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_Group"
+          },
+          {
+            "name": "strComsetMAACCOUNTAcc_RateType",
+            "dataType": "string",
+            "sourceColumn": "strComsetMAACCOUNTAcc_RateType"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/infoctrl-comset westeurope cloudapp azure com;ACIAPepandCo5_UAT\",",
+                "    dbo_tblComsetMAACCOUNT = Source{[Schema=\"dbo\",Item=\"tblComsetMAACCOUNT\"]}[Data]",
+                "in",
+                "    dbo_tblComsetMAACCOUNT"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "faca0019-11fb-40c1-9b72-049e5acb5ab5",
+        "fromTable": "tblComsetMAFINDATA",
+        "fromColumn": "intComsetMACATEGORYId",
+        "toTable": "tblComsetMACATEGORY",
+        "toColumn": "intComsetMACATEGORYId"
+      },
+      {
+        "name": "d26e0286-fb30-43b7-9c72-67d789e5510a",
+        "fromTable": "tblComsetMAFINDATA",
+        "fromColumn": "intComsetMAACCOUNTId",
+        "toTable": "tblComsetMAACCOUNT",
+        "toColumn": "intComsetMAACCOUNTId"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "500"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
